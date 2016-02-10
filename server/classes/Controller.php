@@ -12,40 +12,62 @@ class Controller {
 	}
 	
 	private static function viewIndex(){
-		$db = new DataBase();
-		$managerItem = new ManageItem($db);
-		$managerImage = new ManageImage($db);
-		$items = $managerItem->getList();
+        header('content-type: application/json; charset=utf-8');
+        header("access-control-allow-origin: *");
+        $db = new DataBase();
+        $managerItem = new ManageItem($db);
+        $managerImage = new ManageImage($db);
+        $items = $managerItem->getList();
         $json = '{"items":[';
-		foreach($items as $item){
+        foreach($items as $item){
             $images = $managerImage->getList($item->getId());
             $json .= '{"item":'.$item->getJson().',"image":'.$images[0]->getJson().'},';
         }
         $json = substr($json, 0, -1);
         $json .= ']}';
-		$db->close();
-        header('content-type: application/json; charset=utf-8');
-        header("access-control-allow-origin: *");
+        $db->close();
         echo $json;
 	}
     
     private static function viewItem(){
-		$db = new DataBase();
-		$managerItem = new ManageItem($db);
-		$managerImage = new ManageImage($db);
+        header('content-type: application/json; charset=utf-8');
+        header("access-control-allow-origin: *");
+        $db = new DataBase();
+        $managerItem = new ManageItem($db);
+        $managerImage = new ManageImage($db);
         $id = Request::req('id');
-		$item = $managerItem->get($id);
+        $item = $managerItem->get($id);
         $images = $managerImage->getList($id);
         $json = '{"item":'.$item->getJson().',"images":[';
-		foreach($images as $image){
+        foreach($images as $image){
             $json .= $image->getJson().",";
         }
         $json = substr($json, 0, -1);
         $json .= ']}';
-		$db->close();
+        $db->close();
+        echo $json;
+	}
+    
+    private static function loginUser(){
         header('content-type: application/json; charset=utf-8');
         header("access-control-allow-origin: *");
-        echo $json;
+		$db = new DataBase();
+		$manager = new ManageUser($db);
+		
+		$user = Request::req("email");
+		$pass = Request::req("pass");
+		
+		$usuario = $manager->get($user);
+		$sesion = new Session();
+        
+		if($usuario !== null && $usuario->getPass() === sha1($pass)){
+			$sesion->setUser($user);
+			echo '{"response":1}';
+		} else {
+			$sesion->destroy();
+			echo '{"response":0}';
+		}
+		$db->close();
 	}
 		
 }

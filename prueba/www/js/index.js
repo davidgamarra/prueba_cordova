@@ -22,7 +22,10 @@ myAngular.directive('itemList', ['$http', function($http){
         templateUrl: 'template/item-list.html',
         controller: function(){
             var that = this;
-            this.items;
+            this.email = sessionStorage.getItem('email');
+            this.pass = sessionStorage.getItem('pass');
+            this.items = [];
+            this.login = "";
             this.getList = function() {
                 $http.get('http://davidgamarra.es.mialias.net/').success(function(datos){
                     that.items = datos.items;
@@ -32,7 +35,33 @@ myAngular.directive('itemList', ['$http', function($http){
                 sessionStorage.setItem('id', id);
                 location.href = "detail.html";
             };
-            this.getList();
+            this.getLogin = function(){
+                that.email = document.getElementById("email").value;
+                that.pass = document.getElementById("pass").value;
+                sessionStorage.setItem('email', that.email);
+                sessionStorage.setItem('pass', that.pass);
+                $http.get('http://davidgamarra.es.mialias.net/?action=login&target=user&email='+that.email+'&pass='+that.pass).success(function(datos){
+                    if(datos.response == 1) {
+                        that.getList();
+                        that.login = "";
+                        document.getElementById("login").style.display = "none";
+                    } else {
+                        that.login = "Login incorrecto";
+                    }
+                });
+            }
+            this.doLogin = function(){
+                $http.get('http://davidgamarra.es.mialias.net/?action=login&target=user&email='+that.email+'&pass='+that.pass).success(function(datos){
+                    if(datos.response == 1) {
+                        that.getList();
+                        that.login = "";
+                        document.getElementById("login").style.display = "none";
+                    } else {
+                        document.getElementById("login").style.display = "block";
+                    }
+                });
+            }
+            this.doLogin();
         }, 
         controllerAs: 'cItems'
     };

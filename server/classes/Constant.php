@@ -1,9 +1,9 @@
 <?php
 class Constant {
 	
-	const DATABASE = 'database';		//DataBase name
+	const DATABASE = 'prueba';		//DataBase name
 	const SERVER = 'localhost';		    //Server direction
-	const DBUSER = 'user';			    //DataBase user
-	const DBPASSWORD = 'pass';	        //DataBase user password
+	const DBUSER = 'root';			    //DataBase user
+	const DBPASSWORD = '';	        //DataBase user password
 	
 }

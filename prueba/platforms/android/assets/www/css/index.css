@@ -47,3 +47,27 @@ a {
     width: 100%;
     height: auto;
 }
+
+.wrong {
+    color: red;
+    width: 100%;
+    text-align: center;
+}
+
+form#formLogin {
+    width: 100%;
+    display: flex;
+    flex-flow: column nowrap; 
+    align-items: center;
+    justify-content: center;
+}
+
+form#formLogin input {
+    width: 80%;
+    padding: 10px 5px;
+    font-size: 1rem;
+}
+
+#login {
+    display: none;
+}
