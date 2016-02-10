@@ -1,0 +1,7 @@
+<div ng-repeat="row in cItems.items">
+    <a ng-click="cItems.getItem(row.item.id)" href="#" class="item">
+        <img src="http://davidgamarra.es.mialias.net{{row.image.route}}"/>
+        <h2>{{row.item.title}}</h2>
+    </a>
+    <hr>
+</div>
